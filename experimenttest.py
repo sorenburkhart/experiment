@@ -2,7 +2,7 @@
 """
 
 __author__ = "Soren Burkhart (soren.burkhart@gmail.com)"
-__version__ = "$Revision: 0.1 $"
+__version__ = "$Revision: 0.2 $"
 __date__ = "$Date: 2010/01/29 13:36:22 $"
 __copyright__ = "Copyright (c) 2010 Soren Burkhart"
 __license__ = "Python"
@@ -137,8 +137,12 @@ class ExperimentLoaderTest(unittest.TestCase):
 
         self.assertEqual(['TNF (ng/ml)', 'EGF (ng/ml)', 'Ins (ng/ml)', 'C225 (\xc2\xb5g/ml)', 'IL-1ra (\xc2\xb5g/ml)'],
                          e.header.input_header)
-        self.assertEqual( ['ERK', 'Akt', 'JNK', 'IKK', 'MK2', 'pMEK', 'pAkt (IB)', 'pFKHR', 'pIRS1-636', 'pIRS1-896', 'ProC8', 'ClvC8', 'ProC3', 'pEGFR', 'tEGFR', 'ptEGFR', 'pAkt (AA)', 'tAkt', 'ptAkt', 'CC3/CCK', 'Annexin', 'PI', 'Sub G1'],
+        self.assertEqual(['ERK', 'Akt', 'JNK', 'IKK', 'MK2', 'pMEK', 'pAkt (IB)', 'pFKHR', 'pIRS1-636', 'pIRS1-896', 'ProC8', 'ClvC8', 'ProC3', 'pEGFR', 'tEGFR', 'ptEGFR', 'pAkt (AA)', 'tAkt', 'ptAkt', 'CC3/CCK', 'Annexin', 'PI', 'Sub G1'],
                          e.header.observation_header)
+        self.assertEqual('Time (min)',
+                         e.header.time_header)
+        self.assertEqual('Replicate',
+                         e.header.replicate_header)
         self.assertEqual('Experiment: 0 TNF (ng/ml) 0 EGF (ng/ml) 0 Ins (ng/ml) 0 C225 (\xc2\xb5g/ml) 0 IL-1ra (\xc2\xb5g/ml)',
                          e.description)
         self.assertEqual(14,

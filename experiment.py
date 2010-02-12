@@ -6,7 +6,7 @@ The objects can render themselves into web format.
 """
 
 __author__ = "Soren Burkhart (soren.burkhart@gmail.com)"
-__version__ = "$Revision: 0.21 $"
+__version__ = "$Revision: 0.22 $"
 __date__ = "$Date: 2010/01/29 13:36:22 $"
 __copyright__ = "Copyright (c) 2010 Soren Burkhart"
 __license__ = "Python"
@@ -19,11 +19,11 @@ import csv
 
 class Loader:
     """Loader creates experiments from a file"""
-    def __init__(self, file, var_count):
+    def __init__(self, file, input_count):
         if None == file:
             raise FileMissingError, 'File cannot be None'
         self.file = file
-        self.var_count = var_count
+        self.input_count = input_count
         
         self.experiments = []
     
@@ -36,10 +36,10 @@ class Loader:
         # get the header row
         header = reader.next()
         
-        input_header = header[:self.var_count]
-        time_header = header[self.var_count-1]
-        replicate_header = header[self.var_count]
-        observation_header = header[self.var_count+2:]
+        input_header = header[:self.input_count]
+        time_header = header[self.input_count]
+        replicate_header = header[self.input_count+1]
+        observation_header = header[self.input_count+2:]
         
         # experiment variable
         e = None
@@ -47,13 +47,13 @@ class Loader:
             # Loop through experiment data
             if None == e:
                 # first time through
-                input_values = row[0:self.var_count]
+                input_values = row[0:self.input_count]
                 e = Experiment(input_header, input_values, time_header, replicate_header, observation_header)
-            elif e.input_values != row[0:self.var_count]:
+            elif e.input_values != row[0:self.input_count]:
                 # done processing current experiment add to list
                 self.experiments.append(e)
                 # create new experiment            
-                input_values = row[0:self.var_count]
+                input_values = row[0:self.input_count]
                 e = Experiment(input_header, input_values, time_header, replicate_header, observation_header)
 
             e.add_row_of_data(row)
