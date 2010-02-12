@@ -6,7 +6,7 @@ The objects can render themselves into web format.
 """
 
 __author__ = "Soren Burkhart (soren.burkhart@gmail.com)"
-__version__ = "$Revision: 0.1 $"
+__version__ = "$Revision: 0.2 $"
 __date__ = "$Date: 2010/01/29 13:36:22 $"
 __copyright__ = "Copyright (c) 2010 Soren Burkhart"
 __license__ = "Python"
@@ -45,25 +45,20 @@ class Loader:
         # experiment variable
         e = None
         for row in reader:
-            ###print row
             # Loop through experiment data
             if None == e:
-                ###print "First time"
                 # first time through
                 input_values = row[0:self.var_count]
                 e = Experiment(input_header, input_values, time_header, replicate_header, observation_header)
             elif e.input_values != row[0:self.var_count]:
-                ###print "New experiment"
                 # done processing current experiment add to list
                 self.experiments.append(e)
                 # create new experiment            
                 input_values = row[0:self.var_count]
                 e = Experiment(input_header, input_values, time_header, replicate_header, observation_header)
-            
-            ###print "adding row"
+
             e.add_row_of_data(row)
         
-        ###print "added last experiment"
         self.experiments.append(e)
 
 class Replicate:
@@ -104,7 +99,6 @@ class Experiment:
         self.time_col = len(input_header)
         self.replicate_col = self.time_col + 1
         self.data_start = self.replicate_col + 1
-        #self.data_end = self.data_start + len(self.data_header)
         
         self.set_description()
         self.observations = []
@@ -112,15 +106,6 @@ class Experiment:
     def set_description(self):
         """Set the description for the experiment"""
         self.description = "Experiment: " + " ".join(["%s %s" % (value, header) for value, header in zip(self.input_values, self.header.input_header)])
-
-    def create_replicate_entry_from(self, row):
-        """Creates a replicate entry from row"""
-        return row[self.data_start:self.data_end]
-        
-    def create_data_entry_from(self, row):
-        """Creates a data entry from row"""
-        return {'time': row[self.time_col],
-                'replicates': [self.create_replicate_entry_from(row)]}
 
     def add_row_of_data(self, row):
         """Adds a row of data.
