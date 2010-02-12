@@ -6,7 +6,7 @@ The objects can render themselves into web format.
 """
 
 __author__ = "Soren Burkhart (soren.burkhart@gmail.com)"
-__version__ = "$Revision: 0.2 $"
+__version__ = "$Revision: 0.21 $"
 __date__ = "$Date: 2010/01/29 13:36:22 $"
 __copyright__ = "Copyright (c) 2010 Soren Burkhart"
 __license__ = "Python"
@@ -16,7 +16,6 @@ class ExperimentError(Exception): pass
 class FileMissingError(ExperimentError): pass
 
 import csv
-import copy
 
 class Loader:
     """Loader creates experiments from a file"""
