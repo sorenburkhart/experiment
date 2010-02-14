@@ -6,7 +6,7 @@ The objects can render themselves into web format.
 """
 
 __author__ = "Soren Burkhart (soren.burkhart@gmail.com)"
-__version__ = "$Revision: 0.22 $"
+__version__ = "$Revision: 0.23 $"
 __date__ = "$Date: 2010/01/29 13:36:22 $"
 __copyright__ = "Copyright (c) 2010 Soren Burkhart"
 __license__ = "Python"
@@ -79,8 +79,34 @@ class Observation:
         self.replicates = []
 
     def add_replicate_data(self, data):
+        "Adds a row of replicate data"
         self.replicates.append(Replicate(len(self.replicates)+1,data))
-
+    
+    def means(self):
+        "returns the means of the replicate data.  If there are missing data points returns None"
+        m = []
+        
+        # create an empty array with zero value
+        for i in xrange(len(self.replicates[0].data)):
+            m.append(0.0)
+            
+        # Add up all the values
+        # Insert None for blank entries
+        for replicate in self.replicates:
+            for (counter,value) in enumerate(replicate.data):
+                #print "counter = %d value = %s m[%d]= %s (m[counter] == None) or (value == None) = %s" %(counter,value,counter,m[counter],(m[counter] == None) or (value == None))
+                if (m[counter] == None) or (value == None):
+                    m[counter] = None
+                else:
+                    m[counter] += value
+        
+        # Divide by the number of replicates to get the mean
+        for (counter,replicate_sum) in enumerate(m):
+            if replicate_sum != None:
+                m[counter] = replicate_sum/float(len(self.replicates))
+        
+        return m
+        
 class Header:
     """Header class holds all the header values"""
     def __init__(self, input_header, time_header, replicate_header, observation_header):
