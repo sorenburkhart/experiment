@@ -71,6 +71,16 @@ class Replicate:
                 self.data.append(None)
             else:
                 self.data.append(float(value))
+        
+    def to_JSON(self):
+        """Returns object in JSON format"""
+        data = []
+        for v in self.data:
+            if v == None:
+                data.append("NaN")
+            else:
+                data.append("%1.9f" % v)
+        return '{"number": "%s","data": [%s]}' % (self.number, ", ".join(data))
 
 class Observation:
     """Holds data for an experiment."""
@@ -104,8 +114,12 @@ class Observation:
         for (counter,replicate_sum) in enumerate(m):
             if replicate_sum != None:
                 m[counter] = replicate_sum/float(len(self.replicates))
-        
+        # Return means
         return m
+    
+    def to_JSON(self):
+        """Returns string in JSON format"""
+        return '{"time": %s, "replicates": [%s]}' % (self.time, ", ".join([replicate.to_JSON() for replicate in self.replicates]))
         
 class Header:
     """Header class holds all the header values"""
@@ -114,6 +128,10 @@ class Header:
         self.time_header = time_header
         self.replicate_header = replicate_header
         self.observation_header = observation_header
+
+    def to_JSON(self):
+        """Returns string in JSON format"""
+        return '{"input_header": [\'%s\'], "time_header": \'%s\', "replicate_header": \'%s\', "observation_header": [\'%s\']}' % ("', '".join(self.input_header), self.time_header, self.replicate_header, "', '".join(self.observation_header))
         
 class Experiment:
     """Experiment class that holds data from observations"""
@@ -151,4 +169,6 @@ class Experiment:
         # Add replicate data
         self.observations[-1].add_replicate_data(row[self.data_start:])
 
-        
+    def to_JSON(self):
+        """Returns object in JSON format"""
+        return '{"description": "%s","header": %s,"observations":[%s]}' % (self.description, self.header.to_JSON(), ", ".join([observation.to_JSON() for observation in self.observations]))
